@@ -16,7 +16,6 @@ function loadTasks() {
         tasks = [];
     }
 }
-
 // Save tasks to localStorage with error handling
 function saveTasks() {
     try {

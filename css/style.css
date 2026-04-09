@@ -322,7 +322,6 @@ body {
     to { transform: translateX(100%); opacity: 0; }
 }
 
-/* Empty State - More Compact */
 .empty-state {
     text-align: center;
     padding: 40px 20px;
