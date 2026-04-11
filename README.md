@@ -48,16 +48,17 @@ A beautiful, feature-rich todo list application with a modern glassmorphism desi
 listaGo/
 ├── index.html              # Main HTML file
 ├── assets/                 # Assets directory
-│   └── favicon/            # Favicon files
-│       ├── storage.js     # localStorage operations
-│       ├── storage.js     # localStorage operations
-│       ├── storage.js     # localStorage operations
-│       ├── storage.js     # localStorage operations
-│       ├── storage.js     # localStorage operations
-│   ├── screenshots/       # Screenshot files
+│   ├── favicon/            # Favicon files
+│   │   ├── favicon.ico
+│   │   ├── apple-touch-icon.png
+│   │   └── ...
+│   └── screenshots/        # Screenshot files
+│       ├── default.png
+│       ├── addtask.png
+│       └── deletemodal.png
 ├── css/
-│   └── style.css          # All styling with glassmorphism design
-│   ├── modal.css          # Modal styles
+│   ├── style.css          # Main styling with glassmorphism design
+│   └── modal.css          # Modal styles
 ├── js/
 │   ├── app.js             # Main application entry point
 │   └── modules/
@@ -68,7 +69,9 @@ listaGo/
 │       ├── modal.js       # Delete confirmation modal
 │       ├── editModal.js   # Edit task modal
 │       └── utils.js       # Helper functions
-└── README.md
+├── LICENSE                # MIT License
+├── README.md              # This file
+└── .gitignore             # Git ignore file
 ```
 
 ## 🎨 Design System
