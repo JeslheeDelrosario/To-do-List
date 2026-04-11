@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/modal.css">
+
     <title>ToDo List</title>
 </head>
 <body>
@@ -16,6 +18,7 @@
         <div class="input-container">
             <div class="input-group">
                 <input type="text" id="taskInput" placeholder="What needs to be done?..." autocomplete="off">
+                <input type="date" id="taskDate" class="date-input">
                 <button id="addTaskButton">+ Add Task</button>
             </div>
         </div>
@@ -39,6 +42,27 @@
             </div>
         </div>
     </div>
+
+    <!-- Edit Task Modal -->
+<div id="editModal" class="modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <div class="modal-icon">✏️</div>
+            <h3>Edit Task</h3>
+            <button class="modal-close" id="closeEditModal">&times;</button>
+        </div>
+        <div class="modal-body">
+            <p>Update your task below:</p>
+            <input type="text" id="editTaskInput" class="edit-task-input" placeholder="Task description...">
+            <input type="date" id="editTaskDate" class="edit-date-input">
+            <div class="edit-preview" id="editPreview"></div>
+        </div>
+        <div class="modal-footer">
+            <button class="modal-btn cancel-btn" id="cancelEditBtn">Cancel</button>
+            <button class="modal-btn confirm-btn" id="confirmEditBtn">Save Changes</button>
+        </div>
+    </div>
+</div>
 
     <div id="deleteModal" class="modal">
         <div class="modal-content">

@@ -13,6 +13,7 @@ import { renderTasks, setupFilters, updateStats } from './modules/uiRenderer.js'
 import { setupModal } from './modules/modal.js';
 import { showNotification } from './modules/notifications.js';
 import { debounce } from './modules/utils.js';
+import { setupEditModal, showEditModal, setupInlineEdit } from './modules/editModal.js';
 
 // Initialize the app
 function init() {
@@ -27,6 +28,7 @@ function init() {
     
     // Set up modal
     setupModal();
+    setupEditModal();
     
     // Set up filters
     setupFilters();
@@ -37,30 +39,61 @@ function init() {
     // Set up keyboard shortcuts
     setupKeyboardShortcuts();
     
+    // Set today's date as minimum for date picker
+    setDatePickerMin();
+
+    window.showEditModal = showEditModal;
+    
     // Initial render
     renderTasks();
     
     console.log('App initialized! 🚀');
 }
 
-// Set up event listeners
+// Set minimum date to today for date picker
+function setDatePickerMin() {
+    const taskDate = document.getElementById('taskDate');
+    if (taskDate) {
+        const today = new Date().toISOString().split('T')[0];
+        taskDate.min = today;
+    }
+}
+
+// UPDATED: Set up event listeners with date support
 function setupEventListeners() {
     const addButton = document.getElementById('addTaskButton');
     const taskInput = document.getElementById('taskInput');
+    const taskDate = document.getElementById('taskDate');
     
     if (addButton) {
         addButton.addEventListener('click', () => {
             const input = document.getElementById('taskInput');
-            addTask(input.value.trim());
-            if (input) input.value = '';
+            const dateInput = document.getElementById('taskDate');
+            const taskText = input.value.trim();
+            const dueDate = dateInput ? dateInput.value : null;
+            
+            if (taskText) {
+                // Pass both task text and due date
+                addTask(taskText, dueDate);
+                if (input) input.value = '';
+                if (dateInput) dateInput.value = ''; // Clear date picker
+                input.focus();
+            }
         });
     }
     
     if (taskInput) {
         taskInput.addEventListener('keypress', (e) => {
             if (e.key === 'Enter') {
-                addTask(e.target.value.trim());
-                e.target.value = '';
+                const dateInput = document.getElementById('taskDate');
+                const taskText = e.target.value.trim();
+                const dueDate = dateInput ? dateInput.value : null;
+                
+                if (taskText) {
+                    addTask(taskText, dueDate);
+                    e.target.value = '';
+                    if (dateInput) dateInput.value = '';
+                }
             }
         });
     }
@@ -101,12 +134,7 @@ function setupKeyboardShortcuts() {
 // Make functions available globally for inline event handlers
 window.toggleTaskHandler = (id) => toggleTask(id);
 window.editTaskHandler = (id) => {
-    const tasks = getTasks();
-    const task = tasks.find(t => t.id === id);
-    if (task) {
-        const newText = prompt('Edit task:', task.text);
-        if (newText) editTask(id, newText);
-    }
+    showEditModal(id);  // Opens the modal instead of prompt
 };
 window.deleteTaskHandler = (id, taskText) => {
     window.showDeleteConfirmation(id, taskText, (confirmedId) => {
