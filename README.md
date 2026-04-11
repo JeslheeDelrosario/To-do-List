@@ -1,8 +1,8 @@
-# 📝 Modern ToDo List Application
+# ListaGo - Modern ToDo List Application
 
 A beautiful, feature-rich todo list application with a modern glassmorphism design, built with vanilla JavaScript and ES6 modules.
 
-![Todo App Screenshot](assets/screenshots/default.png)
+![ListaGo App Screenshot](assets/screenshots/default.png)
 
 ## ✨ Features
 
@@ -45,10 +45,19 @@ A beautiful, feature-rich todo list application with a modern glassmorphism desi
 ## 📁 Project Structure
 
 ```
-todo-list/
+listaGo/
 ├── index.html              # Main HTML file
+├── assets/                 # Assets directory
+│   └── favicon/            # Favicon files
+│       ├── storage.js     # localStorage operations
+│       ├── storage.js     # localStorage operations
+│       ├── storage.js     # localStorage operations
+│       ├── storage.js     # localStorage operations
+│       ├── storage.js     # localStorage operations
+│   ├── screenshots/       # Screenshot files
 ├── css/
 │   └── style.css          # All styling with glassmorphism design
+│   ├── modal.css          # Modal styles
 ├── js/
 │   ├── app.js             # Main application entry point
 │   └── modules/
@@ -57,6 +66,7 @@ todo-list/
 │       ├── uiRenderer.js  # UI rendering functions
 │       ├── notifications.js # Toast notifications
 │       ├── modal.js       # Delete confirmation modal
+│       ├── editModal.js   # Edit task modal
 │       └── utils.js       # Helper functions
 └── README.md
 ```
