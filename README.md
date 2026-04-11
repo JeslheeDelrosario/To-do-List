@@ -2,7 +2,7 @@
 
 A beautiful, feature-rich todo list application with a modern glassmorphism design, built with vanilla JavaScript and ES6 modules.
 
-![ToDo App Screenshot](assets\screenshots\default.png)
+![Todo App Screenshot](assets/screenshots/default.png)
 
 ## ✨ Features
 
