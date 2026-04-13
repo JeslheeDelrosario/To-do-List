@@ -14,6 +14,7 @@ import { setupModal } from './modules/modal.js';
 import { showNotification } from './modules/notifications.js';
 import { debounce } from './modules/utils.js';
 import { setupEditModal, showEditModal, setupInlineEdit } from './modules/editModal.js';
+import { setupSidebar, updateSidebarStats } from './modules/sidebar.js';
 
 // Initialize the app
 function init() {
@@ -24,6 +25,7 @@ function init() {
     // Set up render callback
     setRenderCallback(() => {
         renderTasks();
+        updateSidebarStats();
     });
     
     // Set up modal
@@ -32,6 +34,9 @@ function init() {
     
     // Set up filters
     setupFilters();
+    
+    // Set up sidebar navigation
+    setupSidebar();
     
     // Set up event listeners
     setupEventListeners();
@@ -95,6 +100,30 @@ function setupEventListeners() {
                     if (dateInput) dateInput.value = '';
                 }
             }
+        });
+    }
+
+    // Handle header "New Task" button - Smart behavior with Dashboard
+    const headerAddBtn = document.getElementById('addTaskBtn');
+    if (headerAddBtn) {
+        headerAddBtn.addEventListener('click', () => {
+            const currentView = window.getCurrentView ? window.getCurrentView() : 'dashboard';
+            
+            if (currentView === 'dashboard') {
+                // Switch to All Tasks view first
+                const allNavBtn = document.querySelector('.nav-item[data-view="all"]');
+                if (allNavBtn) {
+                    allNavBtn.click();   // This triggers switchView('all')
+                }
+            }
+            
+            // Focus the input after a tiny delay (so view has time to switch)
+            setTimeout(() => {
+                const taskInput = document.getElementById('taskInput');
+                if (taskInput) {
+                    taskInput.focus();
+                }
+            }, 80);
         });
     }
 }

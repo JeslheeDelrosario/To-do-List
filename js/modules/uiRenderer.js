@@ -59,12 +59,12 @@ function getDateStatus(dueDate, isCompleted) {
     return { class: 'future', text: '', icon: '📅' };
 }
 
-export function renderTasks() {
+export function renderTasks(customTasks = null) {
     const taskList = document.getElementById('taskList');
     if (!taskList) return;
     
-    const tasks = getTasks();
-    const filteredTasks = getFilteredTasks();
+    const tasks = customTasks || getTasks();
+    const filteredTasks = customTasks || getFilteredTasks();
     const currentFilter = getCurrentFilter();
     
     if (filteredTasks.length === 0) {
