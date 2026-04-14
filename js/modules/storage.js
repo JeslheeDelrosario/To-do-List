@@ -1,19 +1,23 @@
 // storage.js - Handle all localStorage operations with due date support
 
 let tasks = [];
+let projects = [];
 
 export function loadTasks() {
     try {
         const savedTasks = localStorage.getItem('tasks');
         if (savedTasks) {
             tasks = JSON.parse(savedTasks);
-            // Ensure backward compatibility for tasks without dueDate
-            return tasks.map(task => ({
+            
+            // Backward compatibility: Add projectId if missing
+            tasks = tasks.map(task => ({
                 ...task,
+                projectId: task.projectId || "inbox",   // ← Important!
                 dueDate: task.dueDate || null,
                 createdAt: task.createdAt || new Date().toISOString(),
                 createdDate: task.createdDate || new Date().toDateString()
             }));
+            return tasks;
         }
         return [];
     } catch (error) {
@@ -24,12 +28,12 @@ export function loadTasks() {
 
 export function saveTasks(tasksData) {
     try {
-        // Validate tasks before saving
         const validatedTasks = tasksData.map(task => ({
             id: task.id,
             text: task.text,
             completed: task.completed || false,
             dueDate: task.dueDate || null,
+            projectId: task.projectId || "inbox",     // ← Always ensure projectId
             createdAt: task.createdAt || new Date().toISOString(),
             createdDate: task.createdDate || new Date().toDateString()
         }));
@@ -50,6 +54,42 @@ export function getTasks() {
 export function setTasks(newTasks) {
     tasks = newTasks;
     saveTasks(tasks);
+}
+
+// ==================== PROJECTS STORAGE ====================
+
+export function loadProjects() {
+    try {
+        const savedProjects = localStorage.getItem('projects');
+        if (savedProjects) {
+            projects = JSON.parse(savedProjects);
+            return projects;
+        }
+        return [];
+    } catch (error) {
+        console.warn('Failed to load projects:', error);
+        return [];
+    }
+}
+
+export function saveProjects(projectsData) {
+    try {
+        localStorage.setItem('projects', JSON.stringify(projectsData));
+        projects = projectsData;
+        return true;
+    } catch (error) {
+        console.warn('Failed to save projects:', error);
+        return false;
+    }
+}
+
+export function getProjects() {
+    return projects;
+}
+
+export function setProjects(newProjects) {
+    projects = newProjects;
+    saveProjects(newProjects);
 }
 
 // NEW: Get tasks with due dates only
@@ -107,9 +147,10 @@ export function clearAllTasks() {
 // NEW: Export tasks to JSON file (includes due dates)
 export function exportTasks() {
     const exportData = {
-        version: '1.0',
+        version: '2.0',           // updated version
         exportDate: new Date().toISOString(),
-        tasks: tasks
+        tasks: tasks,
+        projects: projects
     };
     
     const dataStr = JSON.stringify(exportData, null, 2);

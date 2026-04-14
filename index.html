@@ -88,6 +88,9 @@
             <!-- Task Input -->
             <div class="input-area glass">
                 <input type="text" id="taskInput" placeholder="What needs to be done today?">
+                <select id="projectSelect" class="project-select">
+                    <option value="">Select Project</option>
+                </select>
                 <input type="date" id="taskDate" class="date-input">
                 <button id="addTaskButton" class="input-task-btn">Add</button>
             </div>
@@ -104,41 +107,76 @@
     </div>
 
        <!-- Edit Task Modal -->
-    <div id="editModal" class="modal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <div class="modal-icon">✏️</div>
-                <h3>Edit Task</h3>
-                <button class="modal-close" id="closeEditModal">&times;</button>
+    <div id="editTaskModal" class="modal edit-task-modal">
+        <div class="modal-content edit-modal-content">
+            <div class="modal-header edit-modal-header">
+                <div class="modal-icon edit-modal-icon">✏️</div>
+                <h3 class="edit-modal-title">Edit Task</h3>
+                <button class="modal-close edit-modal-close" id="closeEditTaskModal">&times;</button>
             </div>
-            <div class="modal-body">
-                <p>Update your task below:</p>
+            <div class="modal-body edit-modal-body">
+                <p class="edit-modal-instruction">Update your task below:</p>
                 <input type="text" id="editTaskInput" class="edit-task-input" placeholder="Task description...">
                 <input type="date" id="editTaskDate" class="edit-date-input">
-                <div class="edit-preview" id="editPreview"></div>
+                <div class="edit-preview" id="editTaskPreview"></div>
             </div>
-            <div class="modal-footer">
-                <button class="modal-btn cancel-btn" id="cancelEditBtn">Cancel</button>
-                <button class="modal-btn confirm-btn" id="confirmEditBtn">Save Changes</button>
+            <div class="modal-footer edit-modal-footer">
+                <button class="modal-btn cancel-btn edit-cancel-btn" id="cancelEditTaskBtn">Cancel</button>
+                <button class="modal-btn confirm-btn edit-confirm-btn" id="confirmEditTaskBtn">Save Changes</button>
             </div>
         </div>
     </div>
 
-    <div id="deleteModal" class="modal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <div class="modal-icon">🗑️</div>
-                <h3>Delete Task</h3>
-                <button class="modal-close">&times;</button>
+    <div id="deleteTaskModal" class="modal delete-task-modal">
+        <div class="modal-content delete-modal-content">
+            <div class="modal-header delete-modal-header">
+                <div class="modal-icon delete-modal-icon">🗑️</div>
+                <h3 class="delete-modal-title">Delete Task</h3>
+                <button class="modal-close delete-modal-close" id="closeDeleteTaskModal">&times;</button>
             </div>
-            <div class="modal-body">
-                <p>Are you sure you want to delete this task?</p>
-                <div class="task-preview" id="taskToDeletePreview"></div>
-                <p class="modal-warning">⚠️ This action cannot be undone!</p>
+            <div class="modal-body delete-modal-body">
+                <p class="delete-modal-instruction">Are you sure you want to delete this task?</p>
+                <div class="task-preview delete-task-preview" id="deleteTaskPreview"></div>
+                <p class="modal-warning delete-modal-warning">⚠️ This action cannot be undone!</p>
             </div>
-            <div class="modal-footer">
-                <button class="modal-btn cancel-btn" id="cancelDeleteBtn">Cancel</button>
-                <button class="modal-btn confirm-btn" id="confirmDeleteBtn">Yes, Delete</button>
+            <div class="modal-footer delete-modal-footer">
+                <button class="modal-btn cancel-btn delete-cancel-btn" id="cancelDeleteTaskBtn">Cancel</button>
+                <button class="modal-btn confirm-btn delete-confirm-btn" id="confirmDeleteTaskBtn">Yes, Delete</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- PROJECT CREATION MODAL -->
+    <div id="createProjectModal" class="modal create-project-modal">
+        <div class="modal-content create-project-modal-content" style="max-width: 480px;">
+            <div class="modal-header create-project-modal-header">
+                <div class="modal-icon create-project-modal-icon">📁</div>
+                <h3 class="create-project-modal-title">Create New Project</h3>
+                <button class="modal-close create-project-modal-close" id="closeCreateProjectModal">&times;</button>
+            </div>
+            <div class="modal-body create-project-modal-body">
+                <div class="form-group create-project-form-group">
+                    <label class="create-project-label">Project Name</label>
+                    <input type="text" id="createProjectNameInput" class="create-project-input" placeholder="e.g. HTML Programming" maxlength="50">
+                </div>
+
+                <div class="form-group create-project-form-group">
+                    <label class="create-project-label">Choose Icon</label>
+                    <div class="icon-picker create-project-icon-picker" id="createProjectIconPicker">
+                        <!-- Icons will be added by JS -->
+                    </div>
+                </div>
+
+                <div class="form-group create-project-form-group">
+                    <label class="create-project-label">Choose Color</label>
+                    <div class="color-picker create-project-color-picker" id="createProjectColorPicker">
+                        <!-- Colors will be added by JS -->
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer create-project-modal-footer">
+                <button class="modal-btn cancel-btn create-project-cancel-btn" id="cancelCreateProjectBtn">Cancel</button>
+                <button class="modal-btn confirm-btn create-project-confirm-btn" id="createProjectBtn">Create Project</button>
             </div>
         </div>
     </div>

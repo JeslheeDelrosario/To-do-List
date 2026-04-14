@@ -8,10 +8,10 @@ let currentEditMode = 'modal'; // 'modal' or 'inline'
 
 // Setup edit modal
 export function setupEditModal() {
-    const modal = document.getElementById('editModal');
-    const closeBtn = document.getElementById('closeEditModal');
-    const cancelBtn = document.getElementById('cancelEditBtn');
-    const confirmBtn = document.getElementById('confirmEditBtn');
+    const modal = document.getElementById('editTaskModal');
+    const closeBtn = document.getElementById('closeEditTaskModal');
+    const cancelBtn = document.getElementById('cancelEditTaskBtn');
+    const confirmBtn = document.getElementById('confirmEditTaskBtn');
     
     if (!modal) return;
     
@@ -40,7 +40,7 @@ export function setupEditModal() {
     
     // Preview as you type
     const editInput = document.getElementById('editTaskInput');
-    const editPreview = document.getElementById('editPreview');
+    const editPreview = document.getElementById('editTaskPreview');
     
     if (editInput) {
         editInput.addEventListener('input', (e) => {
@@ -62,10 +62,10 @@ export function showEditModal(taskId) {
     if (!task) return;
     
     currentEditTaskId = taskId;
-    const modal = document.getElementById('editModal');
+    const modal = document.getElementById('editTaskModal');
     const editInput = document.getElementById('editTaskInput');
     const editDate = document.getElementById('editTaskDate');
-    const editPreview = document.getElementById('editPreview');
+    const editPreview = document.getElementById('editTaskPreview');
     
     if (modal && editInput && editDate) {
         // Populate with current values

@@ -28,6 +28,8 @@ body {
     display: flex;
     flex-direction: column;
     box-shadow: 4px 0 25px rgba(0, 0, 0, 0.4);
+    transition: transform 0.3s ease, width 0.3s ease;
+    overflow-y: auto;
 }
 
 .sidebar-header {
@@ -140,6 +142,7 @@ body {
     cursor: pointer;
     padding: 6px;
     border-radius: 6px;
+    transition: all 0.2s ease;
 }
 
 .add-project-btn:hover {
@@ -157,10 +160,69 @@ body {
     border-radius: 10px;
     cursor: pointer;
     transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    position: relative;
 }
 
 .project-item:hover {
     background: rgba(255, 255, 255, 0.1);
+}
+
+.project-item.active {
+    background: rgba(99, 102, 241, 0.2);
+    border-left: 3px solid #6366f1;
+}
+
+.project-icon {
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 14px;
+    flex-shrink: 0;
+}
+
+.project-info {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.project-name {
+    font-size: 0.95rem;
+    font-weight: 500;
+    color: #e0e0e0;
+}
+
+.project-count {
+    font-size: 0.8rem;
+    color: #aaa;
+}
+
+.project-delete-btn {
+    background: none;
+    border: none;
+    color: #888;
+    cursor: pointer;
+    padding: 4px;
+    border-radius: 4px;
+    opacity: 0;
+    transition: all 0.2s;
+}
+
+.project-item:hover .project-delete-btn {
+    opacity: 1;
+}
+
+.project-delete-btn:hover {
+    background: rgba(239, 68, 68, 0.2);
+    color: #ef4444;
 }
 
 /* Sidebar Footer */
@@ -198,6 +260,8 @@ body {
     justify-content: space-between;
     align-items: center;
     border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    flex-wrap: wrap;
+    gap: 15px;
 }
 
 .main-header h1 {
@@ -218,11 +282,30 @@ body {
     gap: 8px;
     font-weight: 600;
     transition: all 0.3s;
+    white-space: nowrap;
 }
 
 .add-task-btn:hover {
     transform: translateY(-2px);
     box-shadow: 0 8px 20px rgba(99, 102, 241, 0.4);
+}
+
+/* Project View Header */
+.project-view-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.project-icon-small {
+    width: 36px;
+    height: 36px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 16px;
 }
 
 /* Input Area */
@@ -233,6 +316,7 @@ body {
     display: flex;
     gap: 12px;
     align-items: center;
+    flex-wrap: wrap;
 }
 
 #taskInput {
@@ -243,6 +327,7 @@ body {
     border-radius: 12px;
     font-size: 1.02rem;
     color: white;
+    min-width: 200px;
 }
 
 #taskInput:focus {
@@ -257,9 +342,26 @@ body {
     border: 1px solid rgba(255, 255, 255, 0.2);
     border-radius: 12px;
     color: white;
+    cursor: pointer;
 }
 
-.input-task-btn{
+/* Project Selector */
+.project-select {
+    padding: 14px 16px;
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 12px;
+    color: white;
+    cursor: pointer;
+    min-width: 150px;
+}
+
+.project-select option {
+    background: #1a1a2e;
+    color: white;
+}
+
+.input-task-btn {
     background: linear-gradient(135deg, #6366f1 0%, #a855f7 100%);
     border: none;
     padding: 11px 22px;
@@ -285,8 +387,6 @@ body {
     overflow-y: auto;
 }
 
-/* ==================== KEEP ALL YOUR ORIGINAL STYLES ==================== */
-
 .task-item {
     display: flex;
     align-items: center;
@@ -296,6 +396,8 @@ body {
     border-radius: 12px;
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     margin-bottom: 10px;
+    flex-wrap: wrap;
+    gap: 10px;
 }
 
 .task-item:hover {
@@ -310,6 +412,7 @@ body {
     accent-color: #6366f1;
     cursor: pointer;
     margin-right: 12px;
+    flex-shrink: 0;
 }
 
 .task-text {
@@ -319,6 +422,7 @@ body {
     transition: all 0.3s ease;
     cursor: pointer;
     user-select: none;
+    word-break: break-word;
 }
 
 .task-text.completed {
@@ -332,10 +436,18 @@ body {
     gap: 6px;
     opacity: 0;
     transition: opacity 0.2s ease;
+    flex-shrink: 0;
 }
 
 .task-item:hover .task-actions {
     opacity: 1;
+}
+
+/* For touch devices, always show actions */
+@media (hover: none) and (pointer: coarse) {
+    .task-actions {
+        opacity: 1;
+    }
 }
 
 .edit-btn, .delete-btn {
@@ -343,7 +455,7 @@ body {
     border: none;
     cursor: pointer;
     font-size: 0.9rem;
-    padding: 4px 6px;
+    padding: 8px 10px;
     border-radius: 6px;
     transition: all 0.2s ease;
 }
@@ -381,6 +493,7 @@ body {
     animation: slideInRight 0.3s ease;
     backdrop-filter: blur(10px);
     border: 1px solid rgba(255, 255, 255, 0.1);
+    max-width: 90%;
 }
 
 .notification.success { background: rgba(34, 197, 94, 0.9); }
@@ -405,15 +518,383 @@ body {
     to { transform: translateX(0); opacity: 1; }
 }
 
-/* Responsive */
-@media (max-width: 768px) {
+/* ==================== RESPONSIVE DESIGN ==================== */
+
+/* Tablet Landscape (1024px and below) */
+@media (max-width: 1024px) {
     .sidebar {
-        width: 100%;
-        max-height: 320px;
-        border-right: none;
-        border-bottom: 1px solid rgba(255,255,255,0.1);
+        width: 260px;
     }
+    
+    .main-header h1 {
+        font-size: 1.6rem;
+    }
+    
+    .task-list {
+        padding: 20px;
+    }
+    
+    .input-area {
+        padding: 15px 20px;
+    }
+}
+
+/* Tablet Portrait (768px and below) */
+@media (max-width: 768px) {
     .app {
         flex-direction: column;
+    }
+    
+    .sidebar {
+        width: 100%;
+        max-height: 280px;
+        border-right: none;
+        border-bottom: 1px solid rgba(255,255,255,0.1);
+        padding: 16px;
+        flex-direction: row;
+        flex-wrap: wrap;
+        gap: 16px;
+    }
+    
+    .sidebar-header {
+        width: 100%;
+        margin-bottom: 0;
+    }
+    
+    .logo h2 {
+        font-size: 1.5rem;
+    }
+    
+    .search-container {
+        flex: 1;
+        margin-bottom: 0;
+        min-width: 150px;
+    }
+    
+    .sidebar-nav {
+        flex-direction: row;
+        margin-bottom: 0;
+        flex-wrap: wrap;
+        gap: 8px;
+    }
+    
+    .nav-item {
+        padding: 10px 16px;
+        font-size: 0.9rem;
+    }
+    
+    .projects-section {
+        display: none; /* Hide on mobile, can be toggled */
+    }
+    
+    .sidebar-footer {
+        display: none;
+    }
+    
+    .main-header {
+        padding: 15px 20px;
+    }
+    
+    .main-header h1 {
+        font-size: 1.4rem;
+    }
+    
+    .add-task-btn {
+        padding: 8px 16px;
+        font-size: 0.9rem;
+    }
+    
+    .input-area {
+        padding: 15px 20px;
+        gap: 10px;
+    }
+    
+    #taskInput {
+        padding: 12px 14px;
+        font-size: 0.95rem;
+        min-width: 100%;
+    }
+    
+    .date-input {
+        padding: 12px 14px;
+        flex: 1;
+    }
+    
+    .input-task-btn {
+        padding: 12px 20px;
+        width: 100%;
+        justify-content: center;
+    }
+    
+    .task-list {
+        padding: 15px;
+    }
+    
+    .task-item {
+        padding: 12px;
+    }
+    
+    .task-text {
+        font-size: 0.9rem;
+        width: calc(100% - 70px);
+    }
+}
+
+/* Mobile Large (480px and below) */
+@media (max-width: 480px) {
+    .sidebar {
+        max-height: 240px;
+        padding: 12px;
+    }
+    
+    .logo h2 {
+        font-size: 1.3rem;
+    }
+    
+    .logo img {
+        width: 32px;
+        height: 32px;
+    }
+    
+    .nav-item {
+        padding: 8px 12px;
+        font-size: 0.85rem;
+        gap: 8px;
+    }
+    
+    .nav-item i {
+        font-size: 0.9rem;
+    }
+    
+    .main-header {
+        padding: 12px 16px;
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    
+    .main-header h1 {
+        font-size: 1.3rem;
+    }
+    
+    .add-task-btn {
+        width: 100%;
+        justify-content: center;
+    }
+    
+    .input-area {
+        padding: 12px 16px;
+        flex-direction: column;
+    }
+    
+    #taskInput,
+    .date-input,
+    .input-task-btn {
+        width: 100%;
+    }
+    
+    .task-item {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    
+    .task-checkbox {
+        margin-right: 0;
+        margin-bottom: 8px;
+    }
+    
+    .task-text {
+        width: 100%;
+        margin-bottom: 8px;
+    }
+    
+    .task-actions {
+        width: 100%;
+        justify-content: flex-end;
+        opacity: 1;
+    }
+    
+    .edit-btn, .delete-btn {
+        padding: 8px 16px;
+    }
+    
+    .task-date {
+        font-size: 10px;
+    }
+    
+    .notification {
+        top: 10px;
+        right: 10px;
+        left: 10px;
+        max-width: calc(100% - 20px);
+        font-size: 0.85rem;
+        text-align: center;
+    }
+    
+    .empty-state {
+        padding: 40px 16px;
+    }
+    
+    .empty-state i {
+        font-size: 2rem;
+    }
+    
+    .empty-state p {
+        font-size: 0.9rem;
+    }
+}
+
+/* Mobile Small (375px and below) */
+@media (max-width: 375px) {
+    .sidebar {
+        max-height: 220px;
+    }
+    
+    .nav-item span:not(i) {
+        display: none; /* Hide text, show only icons on very small screens */
+    }
+    
+    .nav-item {
+        padding: 10px;
+        justify-content: center;
+    }
+    
+    .nav-item i {
+        margin: 0;
+        font-size: 1.2rem;
+    }
+    
+    .main-header h1 {
+        font-size: 1.2rem;
+    }
+    
+    .task-text {
+        font-size: 0.85rem;
+    }
+}
+
+/* Landscape Mode for Mobile */
+@media (max-width: 768px) and (orientation: landscape) {
+    .sidebar {
+        max-height: 200px;
+    }
+    
+    .sidebar-nav {
+        flex-wrap: nowrap;
+        overflow-x: auto;
+    }
+    
+    .nav-item {
+        white-space: nowrap;
+    }
+    
+    .input-area {
+        flex-direction: row;
+        flex-wrap: wrap;
+    }
+    
+    #taskInput {
+        min-width: auto;
+        flex: 2;
+    }
+    
+    .date-input {
+        flex: 1;
+    }
+    
+    .input-task-btn {
+        flex: 1;
+    }
+}
+
+/* Touch Device Optimizations */
+@media (hover: none) and (pointer: coarse) {
+    .nav-item:active,
+    .project-item:active,
+    .add-task-btn:active,
+    .input-task-btn:active,
+    .edit-btn:active,
+    .delete-btn:active {
+        transform: scale(0.98);
+        opacity: 0.8;
+    }
+    
+    .task-item:hover {
+        transform: none;
+    }
+    
+    .task-actions {
+        opacity: 1;
+    }
+    
+    button, 
+    .nav-item,
+    .project-item {
+        cursor: pointer;
+        -webkit-tap-highlight-color: transparent;
+    }
+}
+
+/* High DPI Screens */
+@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+    .sidebar,
+    .main-header,
+    .input-area {
+        backdrop-filter: blur(20px);
+    }
+}
+
+/* Dark Mode Support (if user prefers dark theme) */
+@media (prefers-color-scheme: dark) {
+    body {
+        background: linear-gradient(135deg, #0f0c29 0%, #302b63 50%, #24243e 100%);
+    }
+}
+
+/* Reduced Motion Preference */
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+    }
+    
+    .task-item:hover {
+        transform: none;
+    }
+    
+    .add-task-btn:hover,
+    .input-task-btn:hover {
+        transform: none;
+    }
+}
+
+/* Print Styles */
+@media print {
+    .sidebar,
+    .input-area,
+    .task-actions,
+    .add-task-btn,
+    .notification {
+        display: none;
+    }
+    
+    .main-content {
+        margin: 0;
+        padding: 0;
+    }
+    
+    .task-item {
+        break-inside: avoid;
+        page-break-inside: avoid;
+        border: 1px solid #ddd;
+        margin-bottom: 10px;
+    }
+    
+    body {
+        background: white;
+        color: black;
     }
 }

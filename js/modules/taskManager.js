@@ -1,6 +1,7 @@
 // taskManager.js - Handle task CRUD operations with due dates
 import { getTasks as getTasksFromStorage, setTasks as setTasksInStorage, saveTasks } from './storage.js';
 import { showNotification } from './notifications.js';
+import { getProjectById } from './projectManager.js';
 
 const MAX_TASK_LENGTH = 200;
 let debounceTimer = null;
@@ -41,8 +42,8 @@ export function getFilteredTasks() {
     }
 }
 
-// UPDATED: Add task with due date
-export function addTask(taskText, dueDate = null) {
+// UPDATED: Add task with due date and project assignment
+export function addTask(taskText, dueDate = null, projectId = null) {
     if (debounceTimer) return false;
     
     // Validation
@@ -62,14 +63,15 @@ export function addTask(taskText, dueDate = null) {
         return false;
     }
     
-    // Create task with due date
+    // Create task with due date and project assignment
     const task = {
         id: crypto.randomUUID ? crypto.randomUUID() : Date.now().toString(),
         text: taskText.trim(),
         completed: false,
         createdAt: new Date().toISOString(),
         dueDate: dueDate || null,  // Add due date in YYYY-MM-DD format
-        createdDate: new Date().toDateString()
+        createdDate: new Date().toDateString(),
+        projectId: projectId || null  // Add project assignment
     };
     
     tasks.push(task);
@@ -77,13 +79,19 @@ export function addTask(taskText, dueDate = null) {
     
     if (renderCallback) renderCallback();
     
-    // Show notification with date info
+    // Show notification with project and date info
+    let notificationMessage = 'Task added successfully!';
+    if (projectId) {
+        const project = getProjectById(projectId);
+        if (project) {
+            notificationMessage += ` Added to "${project.name}"`;
+        }
+    }
     if (dueDate) {
         const formattedDate = new Date(dueDate).toLocaleDateString();
-        showNotification(`Task added successfully! Due: ${formattedDate}`, 'success');
-    } else {
-        showNotification('Task added successfully!', 'success');
+        notificationMessage += ` Due: ${formattedDate}`;
     }
+    showNotification(notificationMessage, 'success');
     
     // Debounce
     debounceTimer = setTimeout(() => {

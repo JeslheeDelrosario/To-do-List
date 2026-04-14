@@ -4,14 +4,14 @@ let pendingDeleteId = null;
 let onConfirmCallback = null;
 
 export function setupModal() {
-    const deleteModal = document.getElementById('deleteModal');
-    const confirmDeleteBtn = document.getElementById('confirmDeleteBtn');
-    const cancelDeleteBtn = document.getElementById('cancelDeleteBtn');
-    const modalCloseBtn = document.querySelector('.modal-close');
+    const deleteModal = document.getElementById('deleteTaskModal');
+    const confirmDeleteBtn = document.getElementById('confirmDeleteTaskBtn');
+    const cancelDeleteBtn = document.getElementById('cancelDeleteTaskBtn');
+    const modalCloseBtn = document.getElementById('closeDeleteTaskModal');
     
     // Show delete confirmation
     window.showDeleteConfirmation = (id, taskText, onConfirm) => {
-        const taskPreview = document.getElementById('taskToDeletePreview');
+        const taskPreview = document.getElementById('deleteTaskPreview');
         if (taskPreview) {
             taskPreview.textContent = `"${taskText}"`;
         }
@@ -26,7 +26,7 @@ export function setupModal() {
     };
     
     // Close modal
-    const closeModal = () => {
+    const closeDeleteModal = () => {
         if (deleteModal) {
             deleteModal.style.display = 'none';
             pendingDeleteId = null;
@@ -45,20 +45,20 @@ export function setupModal() {
     
     // Event listeners
     if (confirmDeleteBtn) confirmDeleteBtn.addEventListener('click', executeDelete);
-    if (cancelDeleteBtn) cancelDeleteBtn.addEventListener('click', closeModal);
-    if (modalCloseBtn) modalCloseBtn.addEventListener('click', closeModal);
+    if (cancelDeleteBtn) cancelDeleteBtn.addEventListener('click', closeDeleteModal);
+    if (modalCloseBtn) modalCloseBtn.addEventListener('click', closeDeleteModal);
     
     // Close on outside click
     if (deleteModal) {
         deleteModal.addEventListener('click', (e) => {
-            if (e.target === deleteModal) closeModal();
+            if (e.target === deleteModal) closeDeleteModal();
         });
     }
     
     // Close on Escape key
     document.addEventListener('keydown', (e) => {
         if (e.key === 'Escape' && deleteModal && deleteModal.style.display === 'block') {
-            closeModal();
+            closeDeleteModal();
         }
     });
 }

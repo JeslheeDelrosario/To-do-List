@@ -267,16 +267,5 @@ export function getCurrentView() {
     return currentView;
 }
 
-// Handle project creation (placeholder for future functionality)
-export function setupProjectFunctionality() {
-    const newProjectBtn = document.getElementById('newProjectBtn');
-    if (newProjectBtn) {
-        newProjectBtn.addEventListener('click', () => {
-            // Placeholder for project creation functionality
-            console.log('New project button clicked - functionality to be implemented');
-        });
-    }
-}
-
 // Make current view accessible from app.js and other modules
 window.getCurrentView = getCurrentView;

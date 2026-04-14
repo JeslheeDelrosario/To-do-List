@@ -15,6 +15,8 @@ import { showNotification } from './modules/notifications.js';
 import { debounce } from './modules/utils.js';
 import { setupEditModal, showEditModal, setupInlineEdit } from './modules/editModal.js';
 import { setupSidebar, updateSidebarStats } from './modules/sidebar.js';
+import { setupProjectModal, renderProjectsList } from './modules/projectModal.js';
+import { getProjects } from './modules/projectManager.js';
 
 // Initialize the app
 function init() {
@@ -38,6 +40,10 @@ function init() {
     // Set up sidebar navigation
     setupSidebar();
     
+    // Set up project modal
+    setupProjectModal();
+    renderProjectsList();
+    
     // Set up event listeners
     setupEventListeners();
     
@@ -55,6 +61,25 @@ function init() {
     console.log('App initialized! 🚀');
 }
 
+// NEW: Update project dropdown
+function updateProjectDropdown() {
+    const projectSelect = document.getElementById('projectSelect');
+    if (!projectSelect) return;
+    
+    // Clear existing options except the first one
+    projectSelect.innerHTML = '<option value="">Select Project</option>';
+    
+    // Add projects from project manager
+    const projects = getProjects();
+    projects.forEach(project => {
+        const option = document.createElement('option');
+        option.value = project.id;
+        option.textContent = project.name;
+        option.style.color = project.color;
+        projectSelect.appendChild(option);
+    });
+}
+
 // Set minimum date to today for date picker
 function setDatePickerMin() {
     const taskDate = document.getElementById('taskDate');
@@ -64,24 +89,28 @@ function setDatePickerMin() {
     }
 }
 
-// UPDATED: Set up event listeners with date support
+// UPDATED: Set up event listeners with project and date support
 function setupEventListeners() {
     const addButton = document.getElementById('addTaskButton');
     const taskInput = document.getElementById('taskInput');
     const taskDate = document.getElementById('taskDate');
+    const projectSelect = document.getElementById('projectSelect');
     
     if (addButton) {
         addButton.addEventListener('click', () => {
             const input = document.getElementById('taskInput');
             const dateInput = document.getElementById('taskDate');
+            const projectSelect = document.getElementById('projectSelect');
             const taskText = input.value.trim();
             const dueDate = dateInput ? dateInput.value : null;
+            const projectId = projectSelect ? projectSelect.value : null;
             
             if (taskText) {
-                // Pass both task text and due date
-                addTask(taskText, dueDate);
+                // Pass task text, due date, and project ID
+                addTask(taskText, dueDate, projectId);
                 if (input) input.value = '';
                 if (dateInput) dateInput.value = ''; // Clear date picker
+                if (projectSelect) projectSelect.value = ''; // Clear project selection
                 input.focus();
             }
         });
@@ -91,17 +120,23 @@ function setupEventListeners() {
         taskInput.addEventListener('keypress', (e) => {
             if (e.key === 'Enter') {
                 const dateInput = document.getElementById('taskDate');
+                const projectSelect = document.getElementById('projectSelect');
                 const taskText = e.target.value.trim();
                 const dueDate = dateInput ? dateInput.value : null;
+                const projectId = projectSelect ? projectSelect.value : null;
                 
                 if (taskText) {
-                    addTask(taskText, dueDate);
+                    addTask(taskText, dueDate, projectId);
                     e.target.value = '';
                     if (dateInput) dateInput.value = '';
+                    if (projectSelect) projectSelect.value = '';
                 }
             }
         });
     }
+    
+    // Update project dropdown when projects change
+    updateProjectDropdown();
 
     // Handle header "New Task" button - Smart behavior with Dashboard
     const headerAddBtn = document.getElementById('addTaskBtn');
