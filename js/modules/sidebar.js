@@ -67,6 +67,22 @@ export function switchView(viewName) {
     // Update main header title
     updateViewTitle(config.title);
 
+    // Check if we're currently in a project view and need to clean up
+    if (window.currentProject) {
+        // Remove project-specific input area
+        const projectInputArea = document.querySelector('.project-input-area');
+        if (projectInputArea) {
+            projectInputArea.remove();
+        }
+        // Clear current project state
+        window.currentProject = null;
+        
+        // Remove active state from project items
+        document.querySelectorAll('.project-item').forEach(item => {
+            item.classList.remove('active');
+        });
+    }
+
     // Get DOM elements once
     const inputArea = document.querySelector('.input-area');
     const taskList = document.getElementById('taskList');

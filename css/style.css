@@ -898,3 +898,184 @@ body {
         color: black;
     }
 }
+
+/* ================ PROJECT-SPECIFIC INPUT AREA ================ */
+.project-input-area {
+    background: linear-gradient(135deg, rgba(99, 102, 241, 0.1) 0%, rgba(139, 92, 246, 0.1) 100%);
+    border: 1px solid rgba(99, 102, 241, 0.2);
+    border-radius: 16px;
+    margin: 20px 30px;
+    padding: 24px;
+    box-shadow: 0 8px 32px rgba(99, 102, 241, 0.1);
+}
+
+.project-input-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 16px;
+}
+
+.project-input-icon {
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 16px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+.project-input-title {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #c7d2fe;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+.project-input-form {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.project-task-input {
+    flex: 1;
+    padding: 14px 18px;
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 12px;
+    font-size: 1.02rem;
+    color: white;
+    min-width: 200px;
+    transition: all 0.3s ease;
+}
+
+.project-task-input:focus {
+    outline: none;
+    border-color: #a5b4fc;
+    background: rgba(255, 255, 255, 0.12);
+    box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
+}
+
+.project-date-input {
+    padding: 14px 16px;
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 12px;
+    color: white;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.project-date-input:focus {
+    outline: none;
+    border-color: #a5b4fc;
+    background: rgba(255, 255, 255, 0.12);
+    box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
+}
+
+.project-date-input::-webkit-calendar-picker-indicator {
+    filter: invert(1);
+    cursor: pointer;
+    opacity: 0.7;
+    transition: opacity 0.2s ease;
+}
+
+.project-date-input::-webkit-calendar-picker-indicator:hover {
+    opacity: 1;
+}
+
+.project-add-btn {
+    padding: 14px 24px;
+    background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+    color: white;
+    border: none;
+    border-radius: 12px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(99, 102, 241, 0.3);
+    white-space: nowrap;
+}
+
+.project-add-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(99, 102, 241, 0.4);
+}
+
+.project-add-btn:active {
+    transform: translateY(0);
+}
+
+/* Responsive Project Input */
+@media (max-width: 768px) {
+    .project-input-area {
+        margin: 16px 20px;
+        padding: 20px;
+    }
+    
+    .project-input-form {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    
+    .project-task-input,
+    .project-date-input,
+    .project-add-btn {
+        width: 100%;
+    }
+    
+    .project-add-btn {
+        margin-top: 8px;
+    }
+}
+
+@media (max-width: 640px) {
+    .project-input-area {
+        margin: 12px 16px;
+        padding: 16px;
+    }
+    
+    .project-input-header {
+        margin-bottom: 12px;
+    }
+    
+    .project-input-title {
+        font-size: 1rem;
+    }
+    
+    .project-input-icon {
+        width: 28px;
+        height: 28px;
+        font-size: 14px;
+    }
+    
+    .project-task-input,
+    .project-date-input {
+        padding: 12px 14px;
+        font-size: 0.95rem;
+    }
+    
+    .project-add-btn {
+        padding: 12px 20px;
+        font-size: 0.95rem;
+    }
+}
+
+/* Touch device optimizations for project input */
+@media (hover: none) and (pointer: coarse) {
+    .project-add-btn:active {
+        transform: scale(0.98);
+        opacity: 0.8;
+    }
+    
+    .project-task-input:focus,
+    .project-date-input:focus {
+        font-size: 16px; /* Prevent zoom on iOS */
+    }
+}

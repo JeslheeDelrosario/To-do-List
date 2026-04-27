@@ -16,7 +16,7 @@ import { debounce } from './modules/utils.js';
 import { setupEditModal, showEditModal, setupInlineEdit } from './modules/editModal.js';
 import { setupSidebar, updateSidebarStats } from './modules/sidebar.js';
 import { setupProjectModal, renderProjectsList } from './modules/projectModal.js';
-import { getProjects } from './modules/projectManager.js';
+import { getProjects, loadProjects } from './modules/projectManager.js';
 
 // Initialize the app
 function init() {
@@ -33,6 +33,9 @@ function init() {
     // Set up modal
     setupModal();
     setupEditModal();
+    
+    // Load saved projects from localStorage
+    loadProjects();
     
     // Set up filters
     setupFilters();

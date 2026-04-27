@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Modal Test - Create Project</title>
+    <link rel="stylesheet" href="css/modal.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: #f0f0f0;
+        }
+        .test-button {
+            background: #6366f1;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 10px;
+        }
+        .test-button:hover {
+            background: #4f46e5;
+        }
+        .device-simulator {
+            border: 2px solid #ccc;
+            margin: 20px 0;
+            padding: 10px;
+            background: white;
+        }
+        .instructions {
+            background: #e0e7ff;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+    </style>
+</head>
+<body>
+    <h1>Create Project Modal Test</h1>
+    
+    <div class="instructions">
+        <h3>Testing Instructions:</h3>
+        <ul>
+            <li>Click the "Open Create Project Modal" button below</li>
+            <li>Test on different devices using browser dev tools</li>
+            <li>Check that the modal is fully visible on all screen sizes</li>
+            <li>Verify that scrolling works properly when content is tall</li>
+            <li>Test in both portrait and landscape orientations</li>
+        </ul>
+    </div>
+
+    <button class="test-button" onclick="openTestModal()">Open Create Project Modal</button>
+    
+    <div class="device-simulator">
+        <h3>Device Testing Tips:</h3>
+        <p><strong>Chrome DevTools:</strong> F12 → Toggle Device Toolbar → Select different devices</p>
+        <p><strong>Test these devices:</strong> iPhone SE, iPhone 12, iPad, Samsung Galaxy S20</p>
+        <p><strong>Test orientations:</strong> Portrait and Landscape</p>
+        <p><strong>Test window sizes:</strong> 320px, 375px, 768px, 1024px+</p>
+    </div>
+
+    <!-- Simplified Create Project Modal for Testing -->
+    <div id="createProjectModal" class="modal create-project-modal">
+        <div class="modal-content create-project-modal-content">
+            <div class="modal-header create-project-modal-header">
+                <div class="modal-icon create-project-modal-icon">📁</div>
+                <h3 class="create-project-modal-title">Create New Project</h3>
+                <button class="modal-close create-project-modal-close" onclick="closeTestModal()">&times;</button>
+            </div>
+            <div class="modal-body create-project-modal-body">
+                <div class="form-group create-project-form-group">
+                    <label class="create-project-label">Project Name</label>
+                    <input type="text" id="createProjectNameInput" class="create-project-input" placeholder="e.g. HTML Programming" maxlength="50">
+                </div>
+
+                <div class="form-group create-project-form-group">
+                    <label class="create-project-label">Choose Icon</label>
+                    <div class="icon-picker create-project-icon-picker" id="createProjectIconPicker">
+                        <div class="icon-option selected"><i class="fas fa-folder"></i></div>
+                        <div class="icon-option"><i class="fas fa-code"></i></div>
+                        <div class="icon-option"><i class="fas fa-laptop"></i></div>
+                        <div class="icon-option"><i class="fas fa-mobile-alt"></i></div>
+                        <div class="icon-option"><i class="fas fa-globe"></i></div>
+                        <div class="icon-option"><i class="fas fa-paint-brush"></i></div>
+                        <div class="icon-option"><i class="fas fa-book"></i></div>
+                        <div class="icon-option"><i class="fas fa-briefcase"></i></div>
+                        <div class="icon-option"><i class="fas fa-heart"></i></div>
+                        <div class="icon-option"><i class="fas fa-star"></i></div>
+                        <div class="icon-option"><i class="fas fa-home"></i></div>
+                        <div class="icon-option"><i class="fas fa-car"></i></div>
+                    </div>
+                </div>
+
+                <div class="form-group create-project-form-group">
+                    <label class="create-project-label">Choose Color</label>
+                    <div class="color-picker create-project-color-picker" id="createProjectColorPicker">
+                        <div class="color-option selected" style="background-color: #6366f1;"></div>
+                        <div class="color-option" style="background-color: #8b5cf6;"></div>
+                        <div class="color-option" style="background-color: #ec4899;"></div>
+                        <div class="color-option" style="background-color: #f43f5e;"></div>
+                        <div class="color-option" style="background-color: #ef4444;"></div>
+                        <div class="color-option" style="background-color: #f97316;"></div>
+                        <div class="color-option" style="background-color: #f59e0b;"></div>
+                        <div class="color-option" style="background-color: #84cc16;"></div>
+                        <div class="color-option" style="background-color: #22c55e;"></div>
+                        <div class="color-option" style="background-color: #10b981;"></div>
+                        <div class="color-option" style="background-color: #06b6d4;"></div>
+                        <div class="color-option" style="background-color: #0ea5e9;"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer create-project-modal-footer">
+                <button class="modal-btn cancel-btn create-project-cancel-btn" onclick="closeTestModal()">Cancel</button>
+                <button class="modal-btn confirm-btn create-project-confirm-btn">Create Project</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function openTestModal() {
+            const modal = document.getElementById('createProjectModal');
+            modal.style.display = 'block';
+            document.body.style.overflow = 'hidden';
+            document.body.classList.add('modal-open');
+        }
+
+        function closeTestModal() {
+            const modal = document.getElementById('createProjectModal');
+            modal.style.display = 'none';
+            document.body.style.overflow = '';
+            document.body.classList.remove('modal-open');
+        }
+
+        // Close modal when clicking outside
+        document.getElementById('createProjectModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeTestModal();
+            }
+        });
+
+        // Close modal on Escape key
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                closeTestModal();
+            }
+        });
+
+        // Add some interactivity to icon and color pickers
+        document.querySelectorAll('.icon-option').forEach(option => {
+            option.addEventListener('click', function() {
+                document.querySelectorAll('.icon-option').forEach(opt => opt.classList.remove('selected'));
+                this.classList.add('selected');
+            });
+        });
+
+        document.querySelectorAll('.color-option').forEach(option => {
+            option.addEventListener('click', function() {
+                document.querySelectorAll('.color-option').forEach(opt => opt.classList.remove('selected'));
+                this.classList.add('selected');
+            });
+        });
+    </script>
+</body>
+</html>

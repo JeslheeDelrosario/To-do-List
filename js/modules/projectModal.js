@@ -1,8 +1,8 @@
 // modules/projectModal.js - Project creation modal functionality
 
-import { createProject, getProjects, loadProjects, getProjectById, deleteProject } from './projectManager.js';
+import { createProject, getProjects, loadProjects, getProjectById, deleteProject, getTasksByProject } from './projectManager.js';
 import { showNotification } from './notifications.js';
-import { getTasks } from './taskManager.js';
+import { getTasks, addTask } from './taskManager.js';
 import { renderTasks } from './uiRenderer.js';
 
 let selectedIcon = 'fas fa-folder';
@@ -81,6 +81,7 @@ function openProjectModal() {
     if (projectModal) {
         projectModal.style.display = 'block';
         document.body.style.overflow = 'hidden';
+        document.body.classList.add('modal-open');
         isProjectModalOpen = true;
         
         // Reset form
@@ -101,6 +102,7 @@ function closeProjectModal() {
     if (projectModal) {
         projectModal.style.display = 'none';
         document.body.style.overflow = '';
+        document.body.classList.remove('modal-open');
         isProjectModalOpen = false;
     }
 }
@@ -257,17 +259,145 @@ function filterTasksByProject(projectId) {
         `;
     }
 
-    // Filter tasks and render
-    const tasks = getTasks();
-    let filteredTasks;
+    // Show project page with dedicated task input
+    showProjectPage(project);
+}
+
+function showProjectPage(project) {
+    // Hide global task input and show project-specific input
+    const globalInputArea = document.querySelector('.input-area');
+    const mainContent = document.querySelector('.main-content');
     
-    if (projectId === 'inbox') {
-        filteredTasks = tasks.filter(t => !t.projectId || t.projectId === 'inbox');
-    } else {
-        filteredTasks = tasks.filter(t => t.projectId === projectId);
+    if (globalInputArea) {
+        globalInputArea.style.display = 'none';
+    }
+    
+    // Remove any existing project input area
+    const existingProjectInput = document.querySelector('.project-input-area');
+    if (existingProjectInput) {
+        existingProjectInput.remove();
+    }
+    
+    // Create project-specific input area
+    const projectInputArea = document.createElement('div');
+    projectInputArea.className = 'input-area glass project-input-area';
+    projectInputArea.innerHTML = `
+        <div class="project-input-header">
+            <div class="project-input-icon" style="background-color: ${project.color}">
+                <i class="${project.icon}"></i>
+            </div>
+            <span class="project-input-title">Add task to ${project.name}</span>
+        </div>
+        <div class="project-input-form">
+            <input type="text" id="projectTaskInput" class="project-task-input" placeholder="What needs to be done in ${project.name}?">
+            <input type="date" id="projectTaskDate" class="project-date-input">
+            <button id="addProjectTaskBtn" class="project-add-btn">Add Task</button>
+        </div>
+    `;
+    
+    // Insert after the main header
+    const mainHeader = document.querySelector('.main-header');
+    if (mainHeader && mainContent) {
+        mainContent.insertBefore(projectInputArea, mainHeader.nextSibling);
     }
 
-    renderTasks(filteredTasks);
+    // Hide global dashboard and normal task UI
+    const dashboardContainer = document.getElementById('dashboardContainer');
+    const taskList = document.getElementById('taskList');
+    const emptyState = document.getElementById('emptyState');
+    if (dashboardContainer) dashboardContainer.style.display = 'none';
+    if (taskList) taskList.style.display = 'block';
+    if (emptyState) emptyState.style.display = 'none';
+    
+    // Filter and render project tasks
+    const projectTasks = getTasksByProject(project.id);
+    renderTasks(projectTasks);
+    
+    // Set up event listeners for project-specific task input
+    setupProjectTaskInput(project.id);
+    
+    // Store current project for navigation
+    window.currentProject = project;
+}
+
+function setupProjectTaskInput(projectId) {
+    const taskInput = document.getElementById('projectTaskInput');
+    const taskDate = document.getElementById('projectTaskDate');
+    const addButton = document.getElementById('addProjectTaskBtn');
+    
+    if (!taskInput || !addButton) return;
+    
+    const addTaskHandler = () => {
+        const taskText = taskInput.value.trim();
+        const dueDate = taskDate ? taskDate.value : null;
+        
+        if (taskText) {
+            addTask(taskText, dueDate, projectId);
+            taskInput.value = '';
+            if (taskDate) taskDate.value = '';
+            
+            // Refresh project tasks and project counts
+            const projectTasks = getTasksByProject(projectId);
+            renderTasks(projectTasks);
+            renderProjectsList();
+        }
+    };
+    
+    addButton.addEventListener('click', addTaskHandler);
+    
+    taskInput.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') {
+            addTaskHandler();
+        }
+    });
+    
+    // Focus the input
+    taskInput.focus();
+}
+
+// Function to show global input (when not viewing a project)
+function showGlobalInput() {
+    const globalInputArea = document.querySelector('.input-area');
+    const projectInputArea = document.querySelector('.project-input-area');
+    
+    if (globalInputArea) {
+        globalInputArea.style.display = 'flex';
+    }
+    
+    if (projectInputArea) {
+        projectInputArea.remove();
+    }
+    
+    // Clear current project
+    window.currentProject = null;
+}
+
+// Function to return to dashboard from project view
+function returnToDashboard() {
+    // Clear active project state
+    document.querySelectorAll('.project-item').forEach(item => {
+        item.classList.remove('active');
+    });
+    
+    // Reset view title to Dashboard
+    const viewTitle = document.getElementById('viewTitle');
+    if (viewTitle) {
+        viewTitle.textContent = 'Dashboard';
+    }
+    
+    // Show global input and hide project input
+    showGlobalInput();
+    
+    // Switch to dashboard view using the existing navigation system
+    // Import switchView from sidebar module
+    import('./sidebar.js').then(module => {
+        module.switchView('dashboard');
+    }).catch(error => {
+        console.error('Error loading sidebar module:', error);
+        // Fallback: just render all tasks
+        const tasks = getTasks();
+        renderTasks(tasks);
+    });
 }
 
 // Global function for project deletion
@@ -279,6 +409,11 @@ window.deleteProjectHandler = function(projectId) {
         if (deleteProject(projectId)) {
             renderProjectsList();
             showNotification(`Project "${project.name}" deleted`, 'success');
+            
+            // If we're currently viewing this project, go back to dashboard
+            if (window.currentProject && window.currentProject.id === projectId) {
+                showDashboard();
+            }
         }
     }
 };
